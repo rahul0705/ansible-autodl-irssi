@@ -13,7 +13,7 @@ addons:
 
 install:
   # Install ansible
-  - pip install ansible
+  - pip install git+git://github.com/ansible/ansible.git@v2.1.1.0-0.1.rc1
 
   # Check ansible version
   - ansible --version
@@ -22,8 +22,23 @@ install:
   - printf '[defaults]\nroles_path=../' >ansible.cfg
 
 script:
-  # Basic role syntax check
-  - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
+  # Test for Syntax
+  - >
+    ansible-playbook -i tests/inventory tests/test.yml
+    --syntax-check
+  # Test for Failure
+  - >
+    ansible-playbook -i tests/inventory tests/test.yml --become
+    --connection=local
+  # Test for Idempotence
+  - >
+    ansible-playbook -i tests/inventory tests/test.yml --become
+    --connection=local
+    | grep -q 'changed=0.*failed=0'
+  # Test for Succuss
+  - >
+    service autodl-irssi status
+    | grep -q "running"
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
