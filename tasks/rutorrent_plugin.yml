@@ -20,7 +20,7 @@
   notify: restart apache
   with_items:
     - php5-json
-    - php5-net-socket
+    - php-net-socket
     - php5-xml
   when:
       ansible_distribution == "Ubuntu" and ansible_distribution_version < "16.04"
