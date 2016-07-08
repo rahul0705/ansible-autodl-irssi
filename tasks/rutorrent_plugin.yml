@@ -21,7 +21,7 @@
   with_items:
     - php5-json
     - php-net-socket
-    - php5-xml
+    - libapache2-mod-php5
   when:
       ansible_distribution == "Ubuntu" and ansible_distribution_version < "16.04"
   tags:
