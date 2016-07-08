@@ -6,9 +6,24 @@
     name: "{{ item }}"
   notify: restart apache
   with_items:
-    - php{% 5 if (ansible_distribution == "Ubuntu") and (ansible_distribution_version < "16.04") %}-json
-    - php{% 5 if (ansible_distribution == "Ubuntu") and (ansible_distribution_version < "16.04") %}-net-socket
-    - php{% 5 if (ansible_distribution == "Ubuntu") and (ansible_distribution_version < "16.04") %}-xml
+    - php-json
+    - php-net-socket
+    - php-xml
+  when:
+    ansible_distribution == "Ubuntu" and ansible_distribution_version == "16.04"
+  tags:
+    - dependancies
+
+- name: "install autodl-irssi rutorrent plugin dependancies"
+  package:
+    name: "{{ item }}"
+  notify: restart apache
+  with_items:
+    - php5-json
+    - php5-net-socket
+    - php5-xml
+  when:
+      ansible_distribution == "Ubuntu" and ansible_distribution_version < "16.04"
   tags:
     - dependancies
 
