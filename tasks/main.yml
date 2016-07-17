@@ -82,22 +82,6 @@
   tags:
     - service
 
-- name: "Debian | create autodl-irssi service"
-  template:
-    src: autodl-irssi-init.j2
-    dest: /etc/init.d/autodl-irssi
-    owner: root
-    group: root
-    mode: 0755
+- include: configure_{{ ansible_service_mgr }}.yml
   when:
-    ansible_os_family == "Debian"
-  tags:
-    - service
-
-- name: "start autodl-irssi service"
-  service:
-    name: autodl-irssi
-    state: started
-    enabled: yes
-  tags:
-    - service
+    - ansible_service_mgr == "systemd" or ansible_service_mgr == "initd"

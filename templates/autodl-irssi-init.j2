@@ -56,10 +56,9 @@ do_start() {
   check_files;
   if ! [ -s {{ rtorrent_directory_session }}/autodl-irssi.lock ];
   then
-    su - {{ rtorrent_user }} -c "/usr/bin/tmux new-session -s autodl-irssi -n Autodl-Irssi -d ${SERVICE} ${OPTIONS}"
+    su - {{ rtorrent_user }} -c "/usr/bin/tmux -L autodl-irssi new-session -s autodl-irssi -n Autodl-Irssi -d ${SERVICE} ${OPTIONS}"
     sleep 2;
-    __pid=$(su - {{ rtorrent_user }} -c "tmux list-panes -t autodl-irssi -F '#{pane_pid}'")
-    echo "$(hostname):+$__pid" > {{ rtorrent_directory_session }}/autodl-irssi.lock
+    echo "$(hostname):+$(su - {{ rtorrent_user }} -c "/usr/bin/tmux -L autodl-irssi list-panes -t autodl-irssi -F '#{pane_pid}'")" > {{ rtorrent_directory_session }}/autodl-irssi.lock
     do_status;
   else
     get_pid;
@@ -71,40 +70,35 @@ do_start() {
 # Stop Autodl-Irssi inside a tmux session
 do_stop() {
   check_running;
-  su - {{ rtorrent_user }} -c "/usr/bin/tmux send-keys -t autodl-irssi C-q"
+  su - {{ rtorrent_user }} -c "/usr/bin/tmux -L autodl-irssi send-keys -t autodl-irssi /exit C-m"
   sleep 3;
-  rm {{ rtorrent_directory_session }}/autodl-irssi.lock
   # Check if it closed or not
-  if ! [ -s {{ rtorrent_directory_session }}/autodl-irssi.lock ];
-  then
-    echo "Autodl-Irssi stopped."
-  else
-    get_pid;
-    # Make sure the pid doesn't belong to another process
-    if ps ${PID} | grep -sq ${SERVICE};
+  get_pid;
+  # Make sure the pid doesn't belong to another process
+  if ps ${PID} | grep -sq ${SERVICE};
     then
-      if ! [ -s {{ rtorrent_directory_session }}/autodl-irssi.lock ];
-      then
-        echo "Autodl-Irssi stopped."
-      else
-        kill -s INT ${PID}
-      fi
-
-      # Wait 5 seconds to send the stop request to trackers
-      sleep 5;
-      if ! [ -s {{ rtorrent_directory_session }}/autodl-irssi.lock ];
-      then
-        echo "Autodl-Irssi stopped."
-      else
-        kill ${PID}
-        su - {{ rtorrent_user }} -c "rm -f {{ rtorrent_directory_session }}/autodl-irssi.lock"
-        echo "Autodl-Irssi killed."
-      fi
+      rm {{ rtorrent_directory_session }}/autodl-irssi.lock
+    if ! [ -s {{ rtorrent_directory_session }}/autodl-irssi.lock ];
+    then
+      echo "Autodl-Irssi stopped."
     else
-      PROC="$(ps -o command ${PID} | tail -n 1)"
-      echo "Failed to stop Autodl-Irssi. Process ${PID} belongs to ${PROC}."
-      exit 1;
+      kill -s INT ${PID}
     fi
+
+    # Wait 5 seconds to send the stop request to trackers
+    sleep 5;
+    if ! [ -s {{ rtorrent_directory_session }}/autodl-irssi.lock ];
+    then
+      echo "Autodl-Irssi stopped."
+    else
+      kill ${PID}
+      su - {{ rtorrent_user }} -c "rm -f {{ rtorrent_directory_session }}/autodl-irssi.lock"
+      echo "Autodl-Irssi killed."
+    fi
+  else
+    PROC="$(ps -o command ${PID} | tail -n 1)"
+    echo "Failed to stop Autodl-Irssi. Process ${PID} belongs to ${PROC}."
+    exit 1;
   fi
 }
 
@@ -130,7 +124,7 @@ do_info() {
 
 do_connect() {
   check_running;
-  su - {{ rtorrent_user }} -c "/usr/bin/tmux attach -t autodl-irssi"
+  su - {{ rtorrent_user }} -c "/usr/bin/tmux -L autodl-irssi attach -t autodl-irssi"
 }
 
 case "$1" in
