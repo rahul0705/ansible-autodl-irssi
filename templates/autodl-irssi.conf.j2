@@ -1,17 +1,16 @@
 description     "Autodl-Irssi"
 
 console none
-expect fork
+expect daemon
 kill timeout 30
 
 start on (local-filesystems and net-device-up and runlevel [2345])
 stop on runlevel [016]
 
-script
-   exec /usr/bin/tmux -S {{ autodl_irssi_socket_path }} new-session -d -s autodl-irssi -n Autodl-Irssi /usr/bin/irssi
-end script
+exec /usr/bin/tmux -S {{ autodl_irssi_socket_path }} new-session -s autodl-irssi -n Autodl-Irssi -d /usr/bin/irssi
 
+post-start exec /bin/sleep 3
 
-pre-stop script
-    exec /usr/bin/tmux -S {{ autodl_irssi_socket_path }} send-keys -t autodl-irssi /exit C-m
-end script
+pre-stop exec /usr/bin/tmux -S {{ autodl_irssi_socket_path }} send-keys -t autodl-irssi /exit C-m
+
+post-stop exec /bin/sleep 3

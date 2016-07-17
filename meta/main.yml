@@ -14,11 +14,11 @@ galaxy_info:
   galaxy_tags: [irc, networking]
 
 dependencies:
-  - role: "rahul0705.rtorrent"
-  - role: "rahul0705.irssi"
-  - role: "rahul0705.rutorrent"
-    when: autodl_irssi_configure_rutorrent_plugin
-#  - role: "ansible-rtorrent"
-#  - role: "ansible-irssi"
-#  - role: "ansible-rutorrent"
+#  - role: "rahul0705.rtorrent"
+#  - role: "rahul0705.irssi"
+#  - role: "rahul0705.rutorrent"
 #    when: autodl_irssi_configure_rutorrent_plugin
+  - role: "ansible-rtorrent"
+  - role: "ansible-irssi"
+  - role: "ansible-rutorrent"
+    when: autodl_irssi_configure_rutorrent_plugin

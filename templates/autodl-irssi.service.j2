@@ -9,7 +9,9 @@ Type=forking
 KillMode=none
 User={{ rtorrent_user }}
 ExecStart=/usr/bin/tmux -S {{ autodl_irssi_socket_path }} new-session -d -s autodl-irssi -n Autodl-Irssi /usr/bin/irssi
+ExecStartPost=/bin/sleep 3
 ExecStop=/usr/bin/tmux -S {{ autodl_irssi_socket_path }} send-keys -t autodl-irssi /exit C-m
+ExecStopPost=/bin/sleep 3
 
 [Install]
 WantedBy=multi-user.target
