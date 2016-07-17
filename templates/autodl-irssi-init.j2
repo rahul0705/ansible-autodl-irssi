@@ -56,9 +56,9 @@ do_start() {
   check_files;
   if ! [ -s {{ rtorrent_directory_session }}/autodl-irssi.lock ];
   then
-    su - {{ rtorrent_user }} -c "/usr/bin/tmux -L autodl-irssi new-session -s autodl-irssi -n Autodl-Irssi -d ${SERVICE} ${OPTIONS}"
+    su - {{ rtorrent_user }} -c "/usr/bin/tmux -S {{ autodl_irssi_socket_path }} new-session -s autodl-irssi -n Autodl-Irssi -d ${SERVICE} ${OPTIONS}"
     sleep 2;
-    echo "$(hostname):+$(su - {{ rtorrent_user }} -c "/usr/bin/tmux -L autodl-irssi list-panes -t autodl-irssi -F '#{pane_pid}'")" > {{ rtorrent_directory_session }}/autodl-irssi.lock
+    echo "$(hostname):+$(su - {{ rtorrent_user }} -c "/usr/bin/tmux -S {{ autodl_irssi_socket_path }} list-panes -t autodl-irssi -F '#{pane_pid}'")" > {{ rtorrent_directory_session }}/autodl-irssi.lock
     do_status;
   else
     get_pid;
@@ -70,7 +70,7 @@ do_start() {
 # Stop Autodl-Irssi inside a tmux session
 do_stop() {
   check_running;
-  su - {{ rtorrent_user }} -c "/usr/bin/tmux -L autodl-irssi send-keys -t autodl-irssi /exit C-m"
+  su - {{ rtorrent_user }} -c "/usr/bin/tmux -S {{ autodl_irssi_socket_path }} send-keys -t autodl-irssi /exit C-m"
   sleep 3;
   # Check if it closed or not
   get_pid;
@@ -124,7 +124,7 @@ do_info() {
 
 do_connect() {
   check_running;
-  su - {{ rtorrent_user }} -c "/usr/bin/tmux -L autodl-irssi attach -t autodl-irssi"
+  su - {{ rtorrent_user }} -c "/usr/bin/tmux -S {{ autodl_irssi_socket_path }} attach -t autodl-irssi"
 }
 
 case "$1" in

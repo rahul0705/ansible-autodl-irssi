@@ -6,6 +6,8 @@ autodl_irssi_download_url: https://github.com/autodl-community/autodl-irssi/rele
 
 autodl_irssi_directory_config: "{{ rtorrent_user_home }}/.autodl"
 
+autodl_irssi_socket_path: /tmp/autodl-irssi
+
 autodl_irssi_configure_rutorrent_plugin: true
 
 autodl_irssi_rutorrent_plugin_version: v1.62

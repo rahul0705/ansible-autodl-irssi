@@ -4,4 +4,9 @@
 - name: restart apache
   service:
     name: apache
-    state: restart
+    state: restarted
+
+- name: restart autodl-irssi
+  service:
+    name: autodl-irssi
+    state: restarted

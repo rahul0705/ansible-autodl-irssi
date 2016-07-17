@@ -8,10 +8,10 @@ start on (local-filesystems and net-device-up and runlevel [2345])
 stop on runlevel [016]
 
 script
-   exec /usr/bin/tmux -L autodl-irssi new-session -d -s autodl-irssi -n Autodl-Irssi /usr/bin/irssi
+   exec /usr/bin/tmux -S {{ autodl_irssi_socket_path }} new-session -d -s autodl-irssi -n Autodl-Irssi /usr/bin/irssi
 end script
 
 
 pre-stop script
-    exec /usr/bin/tmux -L autodl-irssi send-keys -t autodl-irssi /exit C-m
+    exec /usr/bin/tmux -S {{ autodl_irssi_socket_path }} send-keys -t autodl-irssi /exit C-m
 end script

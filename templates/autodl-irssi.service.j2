@@ -8,8 +8,8 @@ Requires=network.target local-fs.target
 Type=forking
 KillMode=none
 User={{ rtorrent_user }}
-ExecStart=/usr/bin/tmux -L autodl-irssi new-session -d -s autodl-irssi -n Autodl-Irssi /usr/bin/irssi
-ExecStop=/usr/bin/tmux -L autodl-irssi send-keys -t autodl-irssi /exit C-m
+ExecStart=/usr/bin/tmux -S {{ autodl_irssi_socket_path }} new-session -d -s autodl-irssi -n Autodl-Irssi /usr/bin/irssi
+ExecStop=/usr/bin/tmux -S {{ autodl_irssi_socket_path }} send-keys -t autodl-irssi /exit C-m
 
 [Install]
 WantedBy=multi-user.target
