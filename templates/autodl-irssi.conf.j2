@@ -1,0 +1,17 @@
+description     "Autodl-Irssi"
+
+console none
+expect fork
+kill timeout 30
+
+start on (local-filesystems and net-device-up and runlevel [2345])
+stop on runlevel [016]
+
+script
+   exec /usr/bin/tmux -L autodl-irssi new-session -d -s autodl-irssi -n Autodl-Irssi /usr/bin/irssi
+end script
+
+
+pre-stop script
+    exec /usr/bin/tmux -L autodl-irssi send-keys -t autodl-irssi /exit C-m
+end script
