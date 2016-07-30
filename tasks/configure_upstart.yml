@@ -1,0 +1,13 @@
+---
+# tasks file for ansible-autodl-irssi configure_upstart
+
+- name: "create autodl-irssi upstart service"
+  template:
+    src: autodl-irssi.conf.j2
+    dest: /etc/init/autodl-irssi.conf
+    owner: root
+    group: root
+    mode: 0755
+  notify: restart autodl-irssi
+  tags:
+    - service

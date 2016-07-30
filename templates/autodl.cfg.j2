@@ -1,0 +1,41 @@
+# {{ ansible_managed }}
+{% if autodl_irssi_configure_rutorrent_plugin %}
+[options]
+gui-server-port = {{ autodl_irssi_port }}
+gui-server-password = {{ autodl_irssi_password }}
+
+{% endif %}
+{% for irc_server in autodl_irssi_irc_servers %}
+[server {{ irc_server["server"] }}]
+{% if irc_server["nick"] is defined %}nick = {{ irc_server["nick"] }}
+{% endif %}
+{% if irc_server["port"] is defined %}port = {{ irc_server["port"] }}
+{% endif %}
+{% if irc_server["ident_password"] is defined %}ident-password = {{ irc_server["ident_password"] }}
+{% endif %}
+{% if irc_server["ident_email"] is defined %}ident-email = {{ irc_server["ident_email"] }}
+{% endif %}
+{% if irc_server["server_password"] is defined %}server-password = {{ irc_server["server_password"] }}
+{% endif %}
+{% if irc_server["ssl"] is defined and irc_server["ssl"] %}ssl = {{ irc_server["ssl"] }}
+{% endif %}
+{% if irc_server["bnc"] is defined and irc_server["bnc"] %}bnc = {{ irc_server["bnc"] }}
+{% endif %}
+
+{% for irc_channel in irc_server["channels"] %}
+[channel {{ irc_server["server"] }}]
+{% if irc_channel["name"] is defined %}name = {{ irc_channel["name"] }}
+{% endif %}
+{% if irc_channel["password"] is defined %}password = {{ irc_channel["password"] }}
+{% endif %}
+{% if irc_channel["invite_command"] is defined %}invite-command = {{ irc_channel["invite_command"] }}
+{% endif %}
+{% if irc_channel["invite_http_url"] is defined %}invite-http-url = {{ irc_channel["invite_http_url"] }}
+{% endif %}
+{% if irc_channel["invite_http_header"] is defined %}invite-http-header = {{ irc_channel["invite_http_header"] }}
+{% endif %}
+{% if irc_channel["invite_http_data"] is defined %}invite-http-data = {{ irc_channel["invite_http_data"] }}
+{% endif %}
+{% endfor %}
+
+{% endfor %}

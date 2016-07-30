@@ -1,0 +1,5 @@
+#!/bin/bash
+
+#{{ ansible_managed }}
+
+sudo -u {{ rtorrent_user }} /usr/bin/tmux -S {{ autodl_irssi_socket_path }} attach -t autodl-irssi

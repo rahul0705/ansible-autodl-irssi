@@ -1,2 +1,46 @@
 ---
 # defaults file for ansible-autodl-irssi
+
+autodl_irssi_version: v1.62
+autodl_irssi_download_url: https://github.com/autodl-community/autodl-irssi/releases/download/community-{{ autodl_irssi_version }}/autodl-irssi-community-{{ autodl_irssi_version }}.zip
+
+autodl_irssi_directory_config: "{{ rtorrent_user_home }}/.autodl"
+
+autodl_irssi_socket_path: /tmp/autodl-irssi
+
+autodl_irssi_configure_rutorrent_plugin: true
+
+autodl_irssi_rutorrent_plugin_version: v1.62
+autodl_irssi_rutorrent_plugin_download_url: https://github.com/autodl-community/autodl-rutorrent/archive/community-{{ autodl_irssi_version }}.zip
+autodl_irssi_rutorrent_plugin_directory: "{{ rutorrent_document_root }}/plugins"
+
+autodl_irssi_port: 12345
+autodl_irssi_password: secretpass
+
+autodl_irssi_irc_servers:
+    - server: irc.test.com
+      port: 7000
+      nick: test
+      ident_password: test
+      ident_email: test@test.com
+      server_password: pass
+      ssl: true
+      bnc: true
+      channels:
+        - name: "#test"
+          invite_command: "/invite me"
+          invite_http_url: url
+          invite_http_header: header
+          invite_http_data: data
+          password: pass
+        - name: "#anotherone"
+          invite_command: "/something"
+    - server: irc.test2.com
+      port: 7001
+      nick: test2
+      ident_password: test2
+      ident_email: test2@test.com
+      ssl: false
+      channels:
+        - name: "#test2"
+          invite_command: "/invite me please"

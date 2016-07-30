@@ -1,2 +1,115 @@
 ---
 # tasks file for ansible-autodl-irssi
+
+- name: "install ansible dependancies"
+  package:
+    name: "{{ item }}"
+  with_items:
+    - cpanminus
+  tags:
+    - dependancies
+
+- name: "install cpan dependancies"
+  package:
+    name: "{{ item }}"
+  with_items:
+    - gcc
+    - make
+    - libssl-dev
+    - libxml2-dev
+  tags:
+    - dependancies
+
+- name: "install autodl-irssi dependancies"
+  cpanm:
+    name: "{{ item }}"
+  with_items:
+    - Archive::Zip
+    - Net::SSLeay
+    - HTML::Entities
+    - XML::LibXML
+    - Digest::SHA
+    - JSON
+    - JSON::XS
+  tags:
+    - dependancies
+
+- name: "unpack source into scripts directory"
+  unarchive:
+    src: "{{ autodl_irssi_download_url }}"
+    dest: "{{ irssi_directory_scripts }}"
+    copy: no
+    creates: "{{ irssi_directory_scripts }}/AutodlIrssi"
+    owner: "{{ rtorrent_user }}"
+    group: "{{ rtorrent_group }}"
+  tags:
+    - install
+
+- name: "install autodl-irssi in autorun folder"
+  file:
+    src: "{{ irssi_directory_scripts }}/autodl-irssi.pl"
+    dest: "{{ irssi_directory_autorun }}/autodl-irssi.pl"
+    state: link
+  tags:
+    - install
+
+- name: "create autodl-irssi config directory"
+  file:
+    path: "{{ autodl_irssi_directory_config }}"
+    state: directory
+    owner: "{{ rtorrent_user }}"
+    group: "{{ rtorrent_group }}"
+  tags:
+    - configuration
+
+- name: "configure autodl-irssi"
+  template:
+    src: autodl.cfg.j2
+    dest: "{{ autodl_irssi_directory_config }}/autodl.cfg"
+    owner: "{{ rtorrent_user }}"
+    group: "{{ rtorrent_group }}"
+  tags:
+    - configuration
+
+- include: rutorrent_plugin.yml
+  when:
+    - autodl_irssi_configure_rutorrent_plugin
+
+- name: "install tmux"
+  package:
+    name: tmux
+    state: present
+  tags:
+    - service
+
+- include: configure_{{ ansible_service_mgr }}.yml
+  when:
+    - ansible_service_mgr == "systemd" or ansible_service_mgr == "initd" or ansible_service_mgr == "upstart"
+
+- name: "ensure autodl-irssi service is started"
+  service:
+    name: autodl-irssi
+    state: started
+    enabled: yes
+  tags:
+    - service
+
+- name: "add sudoers file"
+  template:
+    src: autodl-irssi.j2
+    dest: /etc/sudoers.d/autodl-irssi
+    owner: root
+    group: root
+    mode: 0440
+  tags:
+    - service
+
+- name: "add connection script"
+  template:
+    src: connect-autodl-irssi.j2
+    dest: /usr/local/sbin/connect-autodl-irssi
+    owner: root
+    group: root
+    mode: a+x
+  tags:
+    - service

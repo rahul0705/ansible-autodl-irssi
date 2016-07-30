@@ -1,0 +1,157 @@
+#!/bin/bash
+# /etc/init.d/autodl-irssi
+
+### BEGIN INIT INFO
+# Provides: autodl-irssi
+# Required-Start: $local_fs $remote_fs
+# Required-Stop: $local_fs $remote_fs
+# Should-Start: $network
+# Should-Stop: $network
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 6
+# Short-Description: Autodl-Irssi client
+# Description: Starts the Autodl-Irssi client
+### END INIT INFO
+
+#{{ ansible_managed }}
+
+# Source function library
+. /lib/lsb/init-functions
+
+# Filename of server binary
+SERVICE="/usr/bin/irssi"
+# Set of options to run autodl-irssi with
+OPTIONS=""
+
+# Check if Autodl-Irssi is running.
+check_running() {
+  if ! [ -s {{ rtorrent_directory_session }}/autodl-irssi.lock ];
+  then
+    echo "Autodl-Irssi not running."
+    exit 1;
+  fi
+}
+
+# Get the Process ID of Autodl-Irssi from the lockfile
+get_pid() {
+  PID=$(cat {{ rtorrent_directory_session }}/autodl-irssi.lock | awk -F: '{print($2)}' | sed "s/[^0-9]//g")
+}
+
+# Check if the config file is readable, check the session dir is readable
+check_files() {
+  if ! [ -r "{{ autodl_irssi_directory_config }}/autodl.cfg" ];
+  then
+    echo "Cannot find readable config file {{ autodl_irssi_directory_config }}/autodl.cfg"
+    exit 1;
+  fi
+  if ! [ -d "{{ rtorrent_directory_session }}" ];
+  then
+    echo "Cannot find readable session directory {{ rtorrent_directory_session }}"
+  exit 1;
+  fi
+}
+
+# Start Autodl-Irssi as a service within a tmux session
+do_start() {
+  check_files;
+  if ! [ -s {{ rtorrent_directory_session }}/autodl-irssi.lock ];
+  then
+    su - {{ rtorrent_user }} -c "/usr/bin/tmux -S {{ autodl_irssi_socket_path }} new-session -s autodl-irssi -n Autodl-Irssi -d ${SERVICE} ${OPTIONS}"
+    sleep 2;
+    echo "$(hostname):+$(su - {{ rtorrent_user }} -c "/usr/bin/tmux -S {{ autodl_irssi_socket_path }} list-panes -t autodl-irssi -F '#{pane_pid}'")" > {{ rtorrent_directory_session }}/autodl-irssi.lock
+    do_status;
+  else
+    get_pid;
+    echo "Autodl-Irssi is running! (pid ${PID})"
+    exit 1;
+  fi
+}
+
+# Stop Autodl-Irssi inside a tmux session
+do_stop() {
+  check_running;
+  su - {{ rtorrent_user }} -c "/usr/bin/tmux -S {{ autodl_irssi_socket_path }} send-keys -t autodl-irssi /exit C-m"
+  sleep 3;
+  # Check if it closed or not
+  get_pid;
+  # Make sure the pid doesn't belong to another process
+  if ps ${PID} | grep -sq ${SERVICE};
+    then
+      rm {{ rtorrent_directory_session }}/autodl-irssi.lock
+    if ! [ -s {{ rtorrent_directory_session }}/autodl-irssi.lock ];
+    then
+      echo "Autodl-Irssi stopped."
+    else
+      kill -s INT ${PID}
+    fi
+
+    # Wait 5 seconds to send the stop request to trackers
+    sleep 5;
+    if ! [ -s {{ rtorrent_directory_session }}/autodl-irssi.lock ];
+    then
+      echo "Autodl-Irssi stopped."
+    else
+      kill ${PID}
+      su - {{ rtorrent_user }} -c "rm -f {{ rtorrent_directory_session }}/autodl-irssi.lock"
+      echo "Autodl-Irssi killed."
+    fi
+  else
+    PROC="$(ps -o command ${PID} | tail -n 1)"
+    echo "Failed to stop Autodl-Irssi. Process ${PID} belongs to ${PROC}."
+    exit 1;
+  fi
+}
+
+# Check if process is running and return PID
+do_status() {
+  check_running;
+  get_pid;
+  echo "Autodl-Irssi running. (pid ${PID})"
+}
+
+# Give a bit more information than status
+do_info() {
+  check_running;
+  get_pid;
+  RSS="$(ps -o rss ${PID} | tail -n 1)"
+  echo "- Base Path                 : {{ rtorrent_user_home }}"
+  echo "- Config File               : {{ autodl_irssi_directory_config }}/autodl.cfg"
+  echo "- tmux Session Name         : autodl-irssi"
+  echo "- Autodl-Irssi Session Path : {{ rtorrent_directory_session }}"
+  echo "- Process ID                : "${PID}""
+  echo "- Memory Usage              : $(expr ${RSS} / 1024) MB (${RSS} kB)"
+}
+
+do_connect() {
+  check_running;
+  su - {{ rtorrent_user }} -c "/usr/bin/tmux -S {{ autodl_irssi_socket_path }} attach -t autodl-irssi"
+}
+
+case "$1" in
+  start)
+    do_start;
+    ;;
+  stop)
+    do_stop;
+    ;;
+  restart)
+    do_stop;
+    sleep 1
+    do_start;
+    ;;
+  status)
+    do_status;
+    ;;
+  info)
+    do_info
+    ;;
+  connect)
+    do_connect;
+    ;;
+  *)
+    echo "Usage: $(basename $0) {start|stop|restart|status|info|connect}"
+    exit 1;
+    ;;
+esac
+
+exit 0;
