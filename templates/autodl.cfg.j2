@@ -171,7 +171,7 @@ gui-server-password = {{ autodl_irssi_password }}
 {% endif %}
 {% if autodl_irssi_config is defined and autodl_irssi_config["filters"] is defined %}
 {% for autodl_irssi_config_filter in autodl_irssi_config["filters"] %}
-[filter {{ autodl_irssi_config_filter["filters"] }}]
+[filter {{ autodl_irssi_config_filter["name"] }}]
 {% if autodl_irssi_config_filter["enabled"] is defined %}enabled = {{ autodl_irssi_config_filter["enabled"] }}
 {% endif %}
 {% if autodl_irssi_config_filter["priority"] is defined %}priority = {{ autodl_irssi_config_filter["priority"] }}
