@@ -1,41 +1,170 @@
 # {{ ansible_managed }}
-{% if autodl_irssi_configure_rutorrent_plugin %}
 [options]
+{% if autodl_irssi_config["options"] is defined %}
+{% if autodl_irssi_config["options"]["update_check"] is defined %}update-check = {{ autodl_irssi_config["options"]["update_check"] }}
+{% endif %}
+{% if autodl_irssi_config["options"]["output_level"] is defined %}output-level = {{ autodl_irssi_config["options"]["output_level"] }}
+{% endif %}
+{% if autodl_irssi_config["options"]["debug"] is defined %}debug = {{ autodl_irssi_config["options"]["debug"] }}
+{% endif %}
+{% if autodl_irssi_config["options"]["advanced_output_sites"] is defined %}advanced-output-sites = {{ autodl_irssi_config["options"]["advanced_output_sites"] }}
+{% endif %}
+{% if autodl_irssi_config["options"]["use_regex"] is defined %}use-regex = {{ autodl_irssi_config["options"]["use_regex"] }}
+{% endif %}
+{% if autodl_irssi_config["options"]["max_saved_releases"] is defined %}max-saved-releases = {{ autodl_irssi_config["options"]["max_saved_releases"] }}
+{% endif %}
+{% if autodl_irssi_config["options"]["save_download_history"] is defined %}save-download-history = {{ autodl_irssi_config["options"]["save_download_history"] }}
+{% endif %}
+{% if autodl_irssi_config["options"]["download_duplicates"] is defined %}download-duplicates = {{ autodl_irssi_config["options"]["download_duplicates"] }}
+{% endif %}
+{% if autodl_irssi_config["options"]["unique_torrent_names"] is defined %}unique-torrent-names = {{ autodl_irssi_config["options"]["unique_torrent_names"] }}
+{% endif %}
+{% if autodl_irssi_config["options"]["download_retry_time_seconds"] is defined %}download-retry-time-seconds = {{ autodl_irssi_config["options"]["download_retry_time_seconds"] }}
+{% endif %}
+{% if autodl_irssi_config["options"]["path_utorrent"] is defined %}path-utorrent = {{ autodl_irssi_config["options"]["path_utorrent"] }}
+{% endif %}
+{% if autodl_irssi_config["options"]["upload_type"] is defined %}upload-type = {{ autodl_irssi_config["options"]["upload_type"] }}
+{% endif %}
+{% if autodl_irssi_config["options"]["rt_address"] is defined %}rt-address = {{ autodl_irssi_config["options"]["rt_address"] }}
+{% endif %}
+{% if autodl_irssi_config["options"]["rt-dir"] is defined %}rt-dir = {{ autodl_irssi_config["options"]["rt-dir"] }}
+{% endif %}
+{% if autodl_irssi_config["options"]["rt-commands"] is defined %}rt-commands = {{ autodl_irssi_config["options"]["rt-commands"] }}
+{% endif %}
+{% if autodl_irssi_config["options"]["rt-label"] is defined %}rt-label = {{ autodl_irssi_config["options"]["rt-label"] }}
+{% endif %}
+{% if autodl_irssi_config["options"]["rt-ratio-group"] is defined %}rt-ratio-group = {{ autodl_irssi_config["options"]["rt-ratio-group"] }}
+{% endif %}
+{% if autodl_irssi_config["options"]["rt-channel"] is defined %}rt-channel = {{ autodl_irssi_config["options"]["rt-channel"] }}
+{% endif %}
+{% if autodl_irssi_config["options"]["rt-priority"] is defined %}rt-priority = {{ autodl_irssi_config["options"]["rt-priority"] }}
+{% endif %}
+{% if autodl_irssi_config["options"]["rt-ignore-scheduler"] is defined %}rt-ignore-scheduler = {{ autodl_irssi_config["options"]["rt-ignore-scheduler"] }}
+{% endif %}
+{% if autodl_irssi_config["options"]["rt-dont-add-name"] is defined %}rt-dont-add-name = {{ autodl_irssi_config["options"]["rt-dont-add-name"] }}
+{% endif %}
+{% if autodl_irssi_config["options"]["upload-watch-dir"] is defined %}upload-watch-dir = {{ autodl_irssi_config["options"]["upload-watch-dir"] }}
+{% endif %}
+{% if autodl_irssi_config["options"]["upload-ftp-path"] is defined %}upload-ftp-path = {{ autodl_irssi_config["options"]["upload-ftp-path"] }}
+{% endif %}
+{% if autodl_irssi_config["options"]["upload-command"] is defined %}upload-command = {{ autodl_irssi_config["options"]["upload-command"] }}
+{% endif %}
+{% if autodl_irssi_config["options"]["upload-args"] is defined %}upload-args = {{ autodl_irssi_config["options"]["upload-args"] }}
+{% endif %}
+{% if autodl_irssi_config["options"]["upload-dyndir"] is defined %}upload-dyndir = {{ autodl_irssi_config["options"]["upload-dyndir"] }}
+{% endif %}
+{% if autodl_irssi_config["options"]["wol-mac-address"] is defined %}wol-mac-address = {{ autodl_irssi_config["options"]["wol-mac-address"] }}
+{% endif %}
+{% if autodl_irssi_config["options"]["wol-ip-address"] is defined %}wol-ip-address = {{ autodl_irssi_config["options"]["wol-ip-address"] }}
+{% endif %}
+{% if autodl_irssi_config["options"]["wol-port"] is defined %}wol-port = {{ autodl_irssi_config["options"]["wol-port"] }}
+{% endif %}
+{% if autodl_irssi_configure_rutorrent_plugin %}
 gui-server-port = {{ autodl_irssi_port }}
 gui-server-password = {{ autodl_irssi_password }}
-
 {% endif %}
-{% for irc_server in autodl_irssi_irc_servers %}
-[server {{ irc_server["server"] }}]
-{% if irc_server["nick"] is defined %}nick = {{ irc_server["nick"] }}
-{% endif %}
-{% if irc_server["port"] is defined %}port = {{ irc_server["port"] }}
-{% endif %}
-{% if irc_server["ident_password"] is defined %}ident-password = {{ irc_server["ident_password"] }}
-{% endif %}
-{% if irc_server["ident_email"] is defined %}ident-email = {{ irc_server["ident_email"] }}
-{% endif %}
-{% if irc_server["server_password"] is defined %}server-password = {{ irc_server["server_password"] }}
-{% endif %}
-{% if irc_server["ssl"] is defined and irc_server["ssl"] %}ssl = {{ irc_server["ssl"] }}
-{% endif %}
-{% if irc_server["bnc"] is defined and irc_server["bnc"] %}bnc = {{ irc_server["bnc"] }}
 {% endif %}
 
-{% for irc_channel in irc_server["channels"] %}
-[channel {{ irc_server["server"] }}]
-{% if irc_channel["name"] is defined %}name = {{ irc_channel["name"] }}
+[irc]
+{% if autodl_irssi_config["irc"] is defined %}
+{% if autodl_irssi_config["irc"]["auto_connect"] is defined %}auto-connect = {{ autodl_irssi_config["irc"]["auto_connect"] }}
 {% endif %}
-{% if irc_channel["password"] is defined %}password = {{ irc_channel["password"] }}
+{% if autodl_irssi_config["irc"]["user_name"] is defined %}user-name = {{ autodl_irssi_config["irc"]["user_name"] }}
 {% endif %}
-{% if irc_channel["invite_command"] is defined %}invite-command = {{ irc_channel["invite_command"] }}
+{% if autodl_irssi_config["irc"]["real_name"] is defined %}real-name = {{ autodl_irssi_config["irc"]["real_name"] }}
 {% endif %}
-{% if irc_channel["invite_http_url"] is defined %}invite-http-url = {{ irc_channel["invite_http_url"] }}
+{% if autodl_irssi_config["irc"]["output_server"] is defined %}output-server = {{ autodl_irssi_config["irc"]["output_server"] }}
 {% endif %}
-{% if irc_channel["invite_http_header"] is defined %}invite-http-header = {{ irc_channel["invite_http_header"] }}
+{% if autodl_irssi_config["irc"]["output_channel"] is defined %}output-channel = {{ autodl_irssi_config["irc"]["output_channel"] }}
 {% endif %}
-{% if irc_channel["invite_http_data"] is defined %}invite-http-data = {{ irc_channel["invite_http_data"] }}
+{% if autodl_irssi_config["irc"]["close_nickserv"] is defined %}close-nickserv = {{ autodl_irssi_config["irc"]["close_nickserv"] }}
 {% endif %}
+{% endif %}
+
+[webui]
+{% if autodl_irssi_config["webui"] is defined %}
+{% if autodl_irssi_config["webui"]["user"] is defined %}user = {{ autodl_irssi_config["webui"]["user"] }}
+{% endif %}
+{% if autodl_irssi_config["webui"]["password"] is defined %}password = {{ autodl_irssi_config["webui"]["password"] }}
+{% endif %}
+{% if autodl_irssi_config["webui"]["hostname"] is defined %}hostname = {{ autodl_irssi_config["webui"]["hostname"] }}
+{% endif %}
+{% if autodl_irssi_config["webui"]["port"] is defined %}port = {{ autodl_irssi_config["webui"]["port"] }}
+{% endif %}
+{% if autodl_irssi_config["webui"]["ssl"] is defined %}ssl = {{ autodl_irssi_config["webui"]["ssl"] }}
+{% endif %}
+{% endif %}
+
+[ftp]
+{% if autodl_irssi_config["ftp"] is defined %}
+{% if autodl_irssi_config["ftp"]["user"] is defined %}user = {{ autodl_irssi_config["ftp"]["user"] }}
+{% endif %}
+{% if autodl_irssi_config["ftp"]["password"] is defined %}password = {{ autodl_irssi_config["ftp"]["password"] }}
+{% endif %}
+{% if autodl_irssi_config["ftp"]["hostname"] is defined %}hostname = {{ autodl_irssi_config["ftp"]["hostname"] }}
+{% endif %}
+{% if autodl_irssi_config["ftp"]["port"] is defined %}port = {{ autodl_irssi_config["ftp"]["port"] }}
+{% endif %}
+{% endif %}
+
+{% if autodl_irssi_config["servers"] is defined %}
+{% for autodl_irssi_config_server in autodl_irssi_config["servers"] %}
+[server {{ autodl_irssi_config_server["server"] }}]
+{% if autodl_irssi_config_server["enabled"] is defined %}enabled = {{ autodl_irssi_config_server["enabled"] }}
+{% endif %}
+{% if autodl_irssi_config_server["port"] is defined %}port = {{ autodl_irssi_config_server["port"] }}
+{% endif %}
+{% if autodl_irssi_config_server["ssl"] is defined and autodl_irssi_config_server["ssl"] %}ssl = {{ autodl_irssi_config_server["ssl"] }}
+{% endif %}
+{% if autodl_irssi_config_server["nick"] is defined %}nick = {{ autodl_irssi_config_server["nick"] }}
+{% endif %}
+{% if autodl_irssi_config_server["ident_password"] is defined %}ident-password = {{ autodl_irssi_config_server["ident_password"] }}
+{% endif %}
+{% if autodl_irssi_config_server["ident_email"] is defined %}ident-email = {{ autodl_irssi_config_server["ident_email"] }}
+{% endif %}
+{% if autodl_irssi_config_server["server_password"] is defined %}server-password = {{ autodl_irssi_config_server["server_password"] }}
+{% endif %}
+{% if autodl_irssi_config_server["bnc"] is defined and autodl_irssi_config_server["bnc"] %}bnc = {{ autodl_irssi_config_server["bnc"] }}
+{% endif %}
+
+{% for autodl_irssi_config_server_channel in autodl_irssi_config_server["channels"] %}
+[channel {{ autodl_irssi_config_server["server"] }}]
+{% if autodl_irssi_config_server_channel["name"] is defined %}name = {{ autodl_irssi_config_server_channel["name"] }}
+{% endif %}
+{% if autodl_irssi_config_server_channel["password"] is defined %}password = {{ autodl_irssi_config_server_channel["password"] }}
+{% endif %}
+{% if autodl_irssi_config_server_channel["invite_command"] is defined %}invite-command = {{ autodl_irssi_config_server_channel["invite_command"] }}
+{% endif %}
+{% if autodl_irssi_config_server_channel["invite_http_url"] is defined %}invite-http-url = {{ autodl_irssi_config_server_channel["invite_http_url"] }}
+{% endif %}
+{% if autodl_irssi_config_server_channel["invite_http_header"] is defined %}invite-http-header = {{ autodl_irssi_config_server_channel["invite_http_header"] }}
+{% endif %}
+{% if autodl_irssi_config_server_channel["invite_http_data"] is defined %}invite-http-data = {{ autodl_irssi_config_server_channel["invite_http_data"] }}
+{% endif %}
+
 {% endfor %}
+{% endfor %}
+{% endif %}
+
+{% if autodl_irssi_config["tracker"] is defined %}
+{% for autodl_irssi_config_tracker in autodl_irssi_config["tracker"] %}
+[tracker {{ autodl_irssi_config_tracker["name"] }} ]
+{% if autodl_irssi_config_tracker["enabled"] is defined %}enabled = {{ autodl_irssi_config_tracker["enabled"] }}
+{% endif %}
+{% if autodl_irssi_config_tracker["force-ssl"] is defined %}force-ssl = {{ autodl_irssi_config_tracker["force-ssl"] }}
+{% endif %}
+{% if autodl_irssi_config_tracker["upload-delay-secs"] is defined %}upload-delay-secs = {{ autodl_irssi_config_tracker["upload-delay-secs"] }}
+{% endif %}
+{% if autodl_irssi_config_tracker["cookie"] is defined %}cookie = {{ autodl_irssi_config_tracker["cookie"] }}
+{% endif %}
+{% if autodl_irssi_config_tracker["passkey"] is defined %}passkey = {{ autodl_irssi_config_tracker["passkey"] }}
+{% endif %}
+{% if autodl_irssi_config_tracker["authkey"] is defined %}authkey = {{ autodl_irssi_config_tracker["authkey"] }}
+{% endif %}
+{% if autodl_irssi_config_tracker["torrent_pass"] is defined %}torrent_pass = {{ autodl_irssi_config_tracker["torrent_pass"] }}
+{% endif %}
+{% if autodl_irssi_config_tracker["uid"] is defined %}uid = {{ autodl_irssi_config_tracker["uid"] }}
+{% endif %}
 
 {% endfor %}
+{% endif %}
