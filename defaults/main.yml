@@ -17,7 +17,7 @@ autodl_irssi_rutorrent_plugin_directory: "{{ rutorrent_document_root }}/plugins"
 autodl_irssi_port: 12345
 autodl_irssi_password: secretpass
 
-autodl_irssi_irc_servers:
+autodl_irssi_servers:
     - server: irc.test.com
       port: 7000
       nick: test
@@ -44,3 +44,29 @@ autodl_irssi_irc_servers:
       channels:
         - name: "#test2"
           invite_command: "/invite me please"
+
+autodl_irssi_trackers:
+    - name: tracker1
+      enabled: "true"
+
+autodl_irssi_filters:
+    - name: filter1
+      enabled: "true"
+      shows: show 1
+    - name: filter2
+      enabled: "true"
+      shows: show 2
+
+autodl_irssi_config:
+    options:
+      update_check: auto
+      output_level: 3
+      debug: "false"
+      advanced_output_sites: all
+      use_regex: "false"
+    irc:
+      auto_connect: true
+      user_name: blah
+    servers: "{{ autodl_irssi_servers }}"
+    trackers: "{{ autodl_irssi_trackers }}"
+    filters: "{{ autodl_irssi_filters }}"
