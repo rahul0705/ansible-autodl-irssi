@@ -32,7 +32,7 @@
     src: "{{ autodl_irssi_rutorrent_plugin_download_url }}"
     dest: "{{ autodl_irssi_rutorrent_plugin_directory }}"
     copy: no
-    creates: "{{ autodl_irssi_rutorrent_plugin_directory }}/autodl-irssi/_conf.php"
+    creates: "{{ autodl_irssi_rutorrent_plugin_directory }}/autodl-irssi"
     group: www-data
     mode: g+w
   tags:
