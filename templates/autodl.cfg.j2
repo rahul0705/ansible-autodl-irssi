@@ -147,8 +147,8 @@ gui-server-password = {{ autodl_irssi_password }}
 {% endif %}
 {% endfor %}
 {% endif %}
-{% if autodl_irssi_config is defined and autodl_irssi_config["tracker"] is defined %}
-{% for autodl_irssi_config_tracker in autodl_irssi_config["tracker"] %}
+{% if autodl_irssi_config is defined and autodl_irssi_config["trackers"] is defined %}
+{% for autodl_irssi_config_tracker in autodl_irssi_config["trackers"] %}
 [tracker {{ autodl_irssi_config_tracker["name"] }} ]
 {% if autodl_irssi_config_tracker["enabled"] is defined %}enabled = {{ autodl_irssi_config_tracker["enabled"] }}
 {% endif %}
