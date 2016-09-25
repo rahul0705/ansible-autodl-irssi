@@ -2,7 +2,8 @@
 
 [Unit]
 Description=Autodl-Irssi
-Requires=network.target local-fs.target
+Requires=network.target local-fs.target rtorrent.service
+After=rtorrent.service
 
 [Service]
 Type=forking
@@ -12,6 +13,7 @@ ExecStart=/usr/bin/tmux -S {{ autodl_irssi_socket_path }} new-session -d -s auto
 ExecStartPost=/bin/sleep 3
 ExecStop=/usr/bin/tmux -S {{ autodl_irssi_socket_path }} send-keys -t autodl-irssi /exit C-m
 ExecStopPost=/bin/sleep 3
+ExecStopPost=-/bin/tmux -S {{ autodl_irssi_socket_path }} kill-session -t autodl-irssi
 
 [Install]
 WantedBy=multi-user.target
