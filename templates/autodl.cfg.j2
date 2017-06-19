@@ -149,7 +149,7 @@ gui-server-password = {{ autodl_irssi_password }}
 {% endif %}
 {% if autodl_irssi_config is defined and autodl_irssi_config["trackers"] is defined %}
 {% for autodl_irssi_config_tracker in autodl_irssi_config["trackers"] %}
-[tracker {{ autodl_irssi_config_tracker["name"] }} ]
+[tracker {{ autodl_irssi_config_tracker["name"] }}]
 {% if autodl_irssi_config_tracker["enabled"] is defined %}enabled = {{ autodl_irssi_config_tracker["enabled"] }}
 {% endif %}
 {% if autodl_irssi_config_tracker["force_ssl"] is defined %}force-ssl = {{ autodl_irssi_config_tracker["force_ssl"] }}
