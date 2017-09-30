@@ -1,31 +1,20 @@
 ---
 # tasks file for ansible-autodl-irssi rutorrent_plugin
 
-- name: Install autodl-irssi rutorrent plugin dependancies
-  package:
-    name: "{{ item }}"
-  notify:
-    - Restart apache
-  with_items:
-    - php-json
-    - php-net-socket
-    - php-xml
-  when:
-    ansible_distribution == "Ubuntu" and ansible_distribution_version == "16.04"
-  tags:
-    - dependancies
+- name: Load a variable file based on the OS type, or a default if not found.
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution }}-{{ ansible_distribution_version }}.yml"
+    - "{{ ansible_distribution }}.yml"
+    - "{{ ansible_os_family }}.yml"
+    - "default.yml"
 
-- name: Install autodl-irssi rutorrent plugin dependancies
+- name: Install autodl-irssi rutorrent plugin dependencies
   package:
     name: "{{ item }}"
   notify:
     - Restart apache
-  with_items:
-    - php5-json
-    - php-net-socket
-    - libapache2-mod-php5
-  when:
-      ansible_distribution == "Ubuntu" and ansible_distribution_version < "16.04"
+  with_items: "{{ autodl_irssi_plugin_dependencies }}"
   tags:
     - dependancies
 

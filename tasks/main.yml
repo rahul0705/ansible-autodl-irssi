@@ -13,7 +13,7 @@
   with_items:
     - cpanminus
   tags:
-    - dependancies
+    - dependencies
 
 - name: Install cpan dependancies
   package:
@@ -24,7 +24,7 @@
     - libssl-dev
     - libxml2-dev
   tags:
-    - dependancies
+    - dependencies
 
 - name: Install autodl-irssi dependancies
   cpanm:
@@ -38,7 +38,7 @@
     - JSON
     - JSON::XS
   tags:
-    - dependancies
+    - dependencies
 
 - name: Unpack source into scripts directory
   unarchive:
