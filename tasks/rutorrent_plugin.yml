@@ -1,10 +1,11 @@
 ---
 # tasks file for ansible-autodl-irssi rutorrent_plugin
 
-- name: "install autodl-irssi rutorrent plugin dependancies"
+- name: Install autodl-irssi rutorrent plugin dependancies
   package:
     name: "{{ item }}"
-  notify: restart apache
+  notify:
+    - Restart apache
   with_items:
     - php-json
     - php-net-socket
@@ -14,10 +15,11 @@
   tags:
     - dependancies
 
-- name: "install autodl-irssi rutorrent plugin dependancies"
+- name: Install autodl-irssi rutorrent plugin dependancies
   package:
     name: "{{ item }}"
-  notify: restart apache
+  notify:
+    - Restart apache
   with_items:
     - php5-json
     - php-net-socket
@@ -27,7 +29,7 @@
   tags:
     - dependancies
 
-- name: "unpack source into plugin directory"
+- name: Unpack source into plugin directory
   unarchive:
     src: "{{ autodl_irssi_rutorrent_plugin_download_url }}"
     dest: "{{ autodl_irssi_rutorrent_plugin_directory }}"
@@ -38,19 +40,20 @@
   tags:
     - install
 
-- name: "rename unpacked folder"
+- name: Rename unpacked folder
   command: mv {{ autodl_irssi_rutorrent_plugin_directory }}/autodl-rutorrent-community-{{ autodl_irssi_rutorrent_plugin_version }} {{ autodl_irssi_rutorrent_plugin_directory }}/autodl-irssi
   args:
     creates: "{{ autodl_irssi_rutorrent_plugin_directory }}/autodl-irssi"
   tags:
     - install
 
-- name: "configure autodl-irssi rutorrent plugin"
+- name: Configure autodl-irssi rutorrent plugin
   template:
     src: conf.php.j2
     dest: "{{ autodl_irssi_rutorrent_plugin_directory }}/autodl-irssi/conf.php"
     group: www-data
     mode: g+w
-  notify: restart apache
+  notify:
+    - Restart apache
   tags:
     - configuration

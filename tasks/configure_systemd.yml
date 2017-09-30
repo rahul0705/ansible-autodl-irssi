@@ -8,6 +8,7 @@
     owner: root
     group: root
     mode: 0644
-  notify: restart autodl-irssi
+  notify:
+    - Restart autodl-irssi
   tags:
     - service
