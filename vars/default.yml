@@ -1,0 +1,6 @@
+---
+# vars file for ansible-autodl-irssi
+
+autodl_irssi_service_filename: autodl-irssi.service.upstart.j2
+autodl_irssi_service_destination: /etc/init/autodl-irssi.conf
+autodl_irssi_service_mode: 0755

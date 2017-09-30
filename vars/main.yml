@@ -1,5 +1,6 @@
 ---
 # vars file for ansible-autodl-irssi
+
 irssi_user: "{{ rtorrent_user }}"
 irssi_group: "{{ rtorrent_group }}"
 irssi_home: "{{ rtorrent_user_home }}"
