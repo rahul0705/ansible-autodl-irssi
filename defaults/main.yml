@@ -11,7 +11,7 @@ autodl_irssi_socket_path: /tmp/autodl-irssi
 autodl_irssi_configure_rutorrent_plugin: true
 
 autodl_irssi_rutorrent_plugin_version: v1.65.5
-autodl_irssi_rutorrent_plugin_download_url: https://github.com/autodl-community/autodl-rutorrent/archive/community-{{ autodl_irssi_version }}.zip
+autodl_irssi_rutorrent_plugin_download_url: https://github.com/autodl-community/autodl-rutorrent/archive/community-{{ autodl_irssi_rutorrent_plugin_version }}.zip
 autodl_irssi_rutorrent_plugin_directory: "{{ rutorrent_document_root }}/plugins"
 
 autodl_irssi_port: 12345
