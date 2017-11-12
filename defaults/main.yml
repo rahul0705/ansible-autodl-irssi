@@ -1,7 +1,7 @@
 ---
 # defaults file for ansible-autodl-irssi
 
-autodl_irssi_version: v1.62
+autodl_irssi_version: v1.65
 autodl_irssi_download_url: https://github.com/autodl-community/autodl-irssi/releases/download/community-{{ autodl_irssi_version }}/autodl-irssi-community-{{ autodl_irssi_version }}.zip
 
 autodl_irssi_directory_config: "{{ rtorrent_user_home }}/.autodl"
@@ -10,8 +10,8 @@ autodl_irssi_socket_path: /tmp/autodl-irssi
 
 autodl_irssi_configure_rutorrent_plugin: true
 
-autodl_irssi_rutorrent_plugin_version: v1.62
-autodl_irssi_rutorrent_plugin_download_url: https://github.com/autodl-community/autodl-rutorrent/archive/community-{{ autodl_irssi_version }}.zip
+autodl_irssi_rutorrent_plugin_version: v1.65.5
+autodl_irssi_rutorrent_plugin_download_url: https://github.com/autodl-community/autodl-rutorrent/archive/community-{{ autodl_irssi_rutorrent_plugin_version }}.zip
 autodl_irssi_rutorrent_plugin_directory: "{{ rutorrent_document_root }}/plugins"
 
 autodl_irssi_port: 12345

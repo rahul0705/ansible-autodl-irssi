@@ -1,12 +1,7 @@
 ---
 # handlers file for ansible-autodl-irssi
 
-- name: restart apache
-  service:
-    name: apache
-    state: restarted
-
-- name: restart autodl-irssi
+- name: Restart autodl-irssi
   service:
     name: autodl-irssi
     state: restarted

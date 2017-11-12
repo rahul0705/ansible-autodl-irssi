@@ -1,0 +1,7 @@
+---
+# vars file for ansible-apache
+
+autodl_irssi_plugin_dependencies:
+  - php-json
+  - php-net-socket
+  - php-xml

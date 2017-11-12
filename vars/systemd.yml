@@ -1,0 +1,6 @@
+---
+# vars file for ansible-autodl-irssi
+
+autodl_irssi_service_filename: autodl-irssi.service.systemd.j2
+autodl_irssi_service_destination: /etc/systemd/system/autodl-irssi.service
+autodl_irssi_service_mode: 0644

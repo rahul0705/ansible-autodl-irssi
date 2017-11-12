@@ -1,15 +1,21 @@
 ---
 # tasks file for ansible-autodl-irssi
 
-- name: "install ansible dependancies"
+- name: Load service manager variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_service_mgr }}.yml"
+    - default.yml
+
+- name: Install ansible dependancies
   package:
     name: "{{ item }}"
   with_items:
     - cpanminus
   tags:
-    - dependancies
+    - dependencies
 
-- name: "install cpan dependancies"
+- name: Install cpan dependancies
   package:
     name: "{{ item }}"
   with_items:
@@ -18,9 +24,9 @@
     - libssl-dev
     - libxml2-dev
   tags:
-    - dependancies
+    - dependencies
 
-- name: "install autodl-irssi dependancies"
+- name: Install autodl-irssi dependancies
   cpanm:
     name: "{{ item }}"
   with_items:
@@ -32,9 +38,9 @@
     - JSON
     - JSON::XS
   tags:
-    - dependancies
+    - dependencies
 
-- name: "unpack source into scripts directory"
+- name: Unpack source into scripts directory
   unarchive:
     src: "{{ autodl_irssi_download_url }}"
     dest: "{{ irssi_directory_scripts }}"
@@ -45,7 +51,7 @@
   tags:
     - install
 
-- name: "install autodl-irssi in autorun folder"
+- name: Install autodl-irssi in autorun folder
   file:
     src: "{{ irssi_directory_scripts }}/autodl-irssi.pl"
     dest: "{{ irssi_directory_autorun }}/autodl-irssi.pl"
@@ -53,7 +59,7 @@
   tags:
     - install
 
-- name: "create autodl-irssi config directory"
+- name: Create autodl-irssi config directory
   file:
     path: "{{ autodl_irssi_directory_config }}"
     state: directory
@@ -62,7 +68,7 @@
   tags:
     - configuration
 
-- name: "configure autodl-irssi"
+- name: Configure autodl-irssi
   template:
     src: autodl.cfg.j2
     dest: "{{ autodl_irssi_directory_config }}/autodl.cfg"
@@ -71,22 +77,30 @@
   tags:
     - configuration
 
-- include: rutorrent_plugin.yml
+- include_tasks: rutorrent_plugin.yml
   when:
     - autodl_irssi_configure_rutorrent_plugin
 
-- name: "install tmux"
+- name: Install tmux
   package:
     name: tmux
     state: present
   tags:
     - service
 
-- include: configure_{{ ansible_service_mgr }}.yml
-  when:
-    - ansible_service_mgr == "systemd" or ansible_service_mgr == "initd" or ansible_service_mgr == "upstart"
+- name: Create autodl-irssi service
+  template:
+    src: "{{ autodl_irssi_service_filename }}"
+    dest: "{{ autodl_irssi_service_destination }}"
+    owner: root
+    group: root
+    mode: "{{ autodl_irssi_service_mode }}"
+  notify:
+    - Restart autodl-irssi
+  tags:
+    - service
 
-- name: "ensure autodl-irssi service is started"
+- name: Ensure autodl-irssi service is started
   service:
     name: autodl-irssi
     state: started
@@ -94,7 +108,7 @@
   tags:
     - service
 
-- name: "add sudoers file"
+- name: Add sudoers file
   template:
     src: autodl-irssi.j2
     dest: /etc/sudoers.d/autodl-irssi
@@ -104,7 +118,7 @@
   tags:
     - service
 
-- name: "add connection script"
+- name: Add connection script
   template:
     src: connect-autodl-irssi.j2
     dest: /usr/local/sbin/connect-autodl-irssi
