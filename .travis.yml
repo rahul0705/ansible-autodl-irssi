@@ -37,11 +37,9 @@ script:
     --connection=local
   # Test for Idempotence
   - >
-    cat /home/rtorrent/.irssi/config
-  - >
-    ansible-playbook --diff -i tests/inventory tests/test.yml --become
+    ansible-playbook -i tests/inventory tests/test.yml --become
     --connection=local
-    #| grep -q 'changed=0.*failed=0'
+    | grep -q 'changed=0.*failed=0'
   # Test for Succuss
   - >
     service autodl-irssi status
